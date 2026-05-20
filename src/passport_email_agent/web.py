@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-import cgi
+from email import policy
+from email.parser import BytesParser
 from html import escape
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -57,29 +58,32 @@ class PassportUploadHandler(BaseHTTPRequestHandler):
         if content_length is None:
             raise PassportExtractionError("Upload is missing content length.")
 
-        form = cgi.FieldStorage(
-            fp=self.rfile,
-            headers=self.headers,
-            environ={
-                "REQUEST_METHOD": "POST",
-                "CONTENT_TYPE": content_type,
-                "CONTENT_LENGTH": content_length,
-            },
+        raw_body = self.rfile.read(int(content_length))
+        message = BytesParser(policy=policy.default).parsebytes(
+            b"Content-Type: "
+            + content_type.encode("utf-8")
+            + b"\r\nMIME-Version: 1.0\r\n\r\n"
+            + raw_body
         )
-        file_item = form["passport_file"] if "passport_file" in form else None
 
-        if file_item is None or not getattr(file_item, "filename", ""):
-            raise PassportExtractionError("Please select a passport file to upload.")
+        for part in message.iter_parts():
+            if part.get_param("name", header="content-disposition") != "passport_file":
+                continue
 
-        payload = file_item.file.read()
-        if not payload:
-            raise PassportExtractionError("Uploaded passport file is empty.")
+            filename = part.get_filename()
+            if not filename:
+                raise PassportExtractionError("Please select a passport file to upload.")
 
-        return (
-            str(file_item.filename),
-            str(getattr(file_item, "type", "") or ""),
-            payload,
-        )
+            payload = part.get_payload(decode=True)
+            if payload is None:
+                content = part.get_content()
+                payload = content.encode("utf-8") if isinstance(content, str) else bytes(content)
+            if not payload:
+                raise PassportExtractionError("Uploaded passport file is empty.")
+
+            return filename, part.get_content_type(), payload
+
+        raise PassportExtractionError("Please select a passport file to upload.")
 
     def _send_html(self, status: HTTPStatus, body: str) -> None:
         payload = body.encode("utf-8")
