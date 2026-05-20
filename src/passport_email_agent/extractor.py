@@ -20,12 +20,12 @@ class PassportExtractor:
         re.IGNORECASE,
     )
     _NAME_RE = re.compile(
-        r"(?:full\s+name|name)\s*[:\-]?\s*([A-Z][A-Z\s,'.-]{2,80})",
+        r"(?:full\s+name|name)\s*[:\-]?\s*([^\r\n]{3,80})",
         re.IGNORECASE,
     )
     _EXPIRY_RE = re.compile(
         r"(?:date\s+of\s+expiry|expiry\s+date|expiration\s+date|expires)\s*[:\-]?\s*"
-        r"([0-9]{1,4}[./\-\s][A-ZA-z0-9]{1,9}[./\-\s][0-9]{2,4}|[0-9]{6})",
+        r"([0-9]{1,4}[./\-\s][A-Za-z0-9]{1,9}[./\-\s][0-9]{2,4}|[0-9]{6})",
         re.IGNORECASE,
     )
     _MRZ_CHARS_RE = re.compile(r"^[A-Z0-9<]{30,}$")
