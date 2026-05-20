@@ -8,31 +8,36 @@ from passport_email_agent.agent import PassportEmailAgent
 from passport_email_agent.config import AgentConfig, DEFAULT_RECIPIENT
 from passport_email_agent.extractor import PassportExtractor
 from passport_email_agent.mail import EmailError, SmtpImapEmailClient
+from passport_email_agent.web import run_upload_server
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="passport-email-agent",
         description=(
-            "Request a passport file by email, wait for the reply attachment, "
-            "extract passport details, and email the details back."
+            "Accept a passport file through a simple upload UI, then extract "
+            "the passport holder name, passport number, and expiry date."
         ),
     )
     subparsers = parser.add_subparsers(dest="command")
 
-    run_parser = subparsers.add_parser("run", help="Run the email request workflow.")
-    run_parser.add_argument(
+    run_parser = subparsers.add_parser("run", help="Run the passport upload web UI.")
+    run_parser.add_argument("--host", default="127.0.0.1")
+    run_parser.add_argument("--port", type=int, default=8000)
+
+    email_parser = subparsers.add_parser("email", help="Run the email request workflow.")
+    email_parser.add_argument(
         "--recipient",
         default=None,
         help=f"Recipient email address. Defaults to env or {DEFAULT_RECIPIENT}.",
     )
-    run_parser.add_argument(
+    email_parser.add_argument(
         "--timeout-seconds",
         type=int,
         default=None,
         help="How long to wait for a reply before failing.",
     )
-    run_parser.add_argument(
+    email_parser.add_argument(
         "--poll-interval-seconds",
         type=int,
         default=None,
@@ -56,10 +61,17 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "extract":
         return _run_extract(args)
-    return _run_agent(args)
+    if args.command == "email":
+        return _run_email_agent(args)
+    return _run_upload_ui(args)
 
 
-def _run_agent(args: argparse.Namespace) -> int:
+def _run_upload_ui(args: argparse.Namespace) -> int:
+    run_upload_server(host=args.host, port=args.port)
+    return 0
+
+
+def _run_email_agent(args: argparse.Namespace) -> int:
     try:
         config = AgentConfig.from_env()
         recipient = args.recipient or config.default_recipient

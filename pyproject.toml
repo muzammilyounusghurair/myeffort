@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "myeffort-passport-email-agent"
 version = "0.1.0"
-description = "Email agent that requests a passport file, extracts passport details, and replies with the results."
+description = "Passport upload agent that extracts passport details from direct file uploads."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
