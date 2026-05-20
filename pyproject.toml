@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "myeffort-passport-email-agent"
+version = "0.1.0"
+description = "Email agent that requests a passport file, extracts passport details, and replies with the results."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pypdf",
+]
+
+[project.optional-dependencies]
+ocr = [
+    "Pillow",
+    "pytesseract",
+]
+dev = [
+    "pytest",
+]
+
+[project.scripts]
+passport-email-agent = "passport_email_agent.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
