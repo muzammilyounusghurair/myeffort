@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "myeffort-passport-agent"
+version = "0.1.0"
+description = "Passport upload agent that extracts passport details from direct file uploads."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pypdf",
+]
+
+[project.optional-dependencies]
+ocr = [
+    "Pillow",
+    "pytesseract",
+]
+dev = [
+    "pytest",
+]
+
+[project.scripts]
+passport-agent = "passport_agent.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
