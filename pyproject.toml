@@ -3,7 +3,7 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "myeffort-passport-email-agent"
+name = "myeffort-passport-agent"
 version = "0.1.0"
 description = "Passport upload agent that extracts passport details from direct file uploads."
 readme = "README.md"
@@ -22,7 +22,7 @@ dev = [
 ]
 
 [project.scripts]
-passport-email-agent = "passport_email_agent.cli:main"
+passport-agent = "passport_agent.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

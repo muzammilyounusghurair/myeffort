@@ -3,7 +3,7 @@ from __future__ import annotations
 import http.client
 import threading
 
-from passport_email_agent.web import PassportUploadServer
+from passport_agent.web import PassportUploadServer
 
 
 def test_upload_ui_extracts_passport_details_from_file() -> None:

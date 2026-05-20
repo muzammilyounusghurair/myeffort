@@ -5,7 +5,7 @@ import re
 from datetime import date, datetime
 from pathlib import Path
 
-from passport_email_agent.models import Attachment, PassportData
+from passport_agent.models import Attachment, PassportData
 
 
 class PassportExtractionError(ValueError):
@@ -104,7 +104,7 @@ class PassportExtractor:
                 return payload.decode(encoding)
             except UnicodeDecodeError:
                 continue
-        raise PassportExtractionError("Attachment is not readable text, PDF, or OCR-capable image.")
+        raise PassportExtractionError("File is not readable text, PDF, or OCR-capable image.")
 
     def _extract_from_text(self, text: str, filename: str) -> PassportData | None:
         mrz_data = self._extract_from_mrz(text, filename)

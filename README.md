@@ -30,7 +30,7 @@ python -m pip install -e ".[ocr]"
 ### Run
 
 ```bash
-passport-email-agent run
+passport-agent run
 ```
 
 Then open:
@@ -45,36 +45,13 @@ file in memory and displays the extracted details.
 To listen on another host or port:
 
 ```bash
-passport-email-agent run --host 0.0.0.0 --port 8080
+passport-agent run --host 0.0.0.0 --port 8080
 ```
 
 You can also test extraction locally without opening the UI:
 
 ```bash
-passport-email-agent extract ./passport.txt
-```
-
-### Optional email workflow
-
-The older email workflow is still available as an explicit command:
-
-```bash
-passport-email-agent email --recipient muzammil.younus@al-ghurair.com
-```
-
-Set these environment variables before using the email workflow:
-
-```bash
-export SMTP_HOST="smtp.example.com"
-export SMTP_PORT="587"
-export SMTP_USERNAME="agent@example.com"
-export SMTP_PASSWORD="password"
-export SMTP_FROM="agent@example.com"
-
-export IMAP_HOST="imap.example.com"
-export IMAP_PORT="993"
-export IMAP_USERNAME="agent@example.com"
-export IMAP_PASSWORD="password"
+passport-agent extract ./passport.txt
 ```
 
 ### Security notes

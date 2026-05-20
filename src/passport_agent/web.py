@@ -7,8 +7,8 @@ from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import Callable
 
-from passport_email_agent.extractor import PassportExtractionError, PassportExtractor
-from passport_email_agent.models import PassportData
+from passport_agent.extractor import PassportExtractionError, PassportExtractor
+from passport_agent.models import PassportData
 
 
 class PassportUploadServer(ThreadingHTTPServer):

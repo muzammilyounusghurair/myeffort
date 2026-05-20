@@ -1,6 +1,6 @@
 from datetime import date
 
-from passport_email_agent.extractor import PassportExtractor
+from passport_agent.extractor import PassportExtractor
 
 
 def test_extracts_passport_data_from_mrz_text() -> None:

@@ -1,4 +1,4 @@
-from passport_email_agent.cli import main
+from passport_agent.cli import main
 
 
 if __name__ == "__main__":
